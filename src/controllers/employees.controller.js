@@ -13,7 +13,7 @@ export const getEmployees = async (req, res) => {
 
 export const getEmployee = async (req, res) => {
 
-    const [rows] = await pool.query('SELECT * FROM empleados WHERE id = ?', [req.params.id]);
+    const [rows] = await pool.query('SELECT * FROM empleados WHERE id_Empleado = ?', [req.params.id]);
 
     if(rows.length <= 0 ) return res.status(404).json({
         message: "Employee not found"
@@ -27,18 +27,21 @@ export const getEmployee = async (req, res) => {
 
 export const createEmployee = async (req, res) => {
 
-    const {name, age} = req.body;
+    const {name, lastname, id_Puesto, status} = req.body;
+
+    console.log(req.body)
 
     // Insert section.
 
-    const [rows] = await pool.query('INSERT INTO empleados (name, age) VALUES (?, ?)', [name, age]);
+    const [rows] = await pool.query('INSERT INTO empleados (Nombres, Apellido, id_Puesto, Activo) VALUES (?, ?, ?, ?)', [name, lastname, id_Puesto, status]);
 
-    console.log(name, age);
     
     res.send({
         id: rows.insertId,
         name,
-        age
+        lastname,
+        id_Puesto,
+        status
     });
 
 };
